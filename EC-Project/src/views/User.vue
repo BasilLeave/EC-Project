@@ -6,8 +6,8 @@
           <li class="user" id="login_logined">
             <div class="head">
               <div class="changeid">
-                <a href="javascript:void(0);" :class="{hide: !userid}" @click="officialConfirm()">我是村官</a>
-                <a href="javascript:void(0);" :class="{hide: userid}" @click="villagerConfirm()">我是村民</a>
+                <a href="javascript:void(0);" :class="{hide: !userInformation.userid}" @click="officialConfirm()">我是村官</a>
+                <a href="javascript:void(0);" :class="{hide: userInformation.userid}" @click="villagerConfirm()">我是村民</a>
               </div>
               <div class="bell-wrap">
                 <a href="#">
@@ -16,6 +16,7 @@
                 </a>
               </div>
               <div class="user-info">
+                <img :src="userInformation.profilePhoto" alt="" class="photo">
                 <a href="#" class="name">{{$route.params.username}}</a>
               </div>
             </div>
@@ -28,14 +29,33 @@
 
 <script>
 import Index from './Index'
+import {getUserData} from "../network/user";
 export default {
   components: {
     Index
   },
   data() {
     return {
-      userid: 0, //0表示村民,1表示村官 默认为0
+      // userid: 0, //0表示村民,1表示村官 默认为0
+      //用户信息
+      userInformation: {
+        profilePhoto: "", //头像
+        nickname: "", //昵称
+        username: "",//用户名
+        userid: 0, //用户标识 0表示村民,1表示村官 默认为0
+      }
     }
+  },
+  created() {
+    //请求用户数据 包括昵称，头像，用户标识（村官或村民）等
+    getUserData().then(res=>{
+      let userlist = res.data.user.list
+      let theuser = userlist.find(item => item.username === this.$route.params.username)
+      this.userInformation.username = theuser.username
+      this.userInformation.nickname = theuser.nickname
+      this.userInformation.profilePhoto = theuser.profilePhoto
+      this.userInformation.userid = theuser.userid
+    })
   },
   methods: {
     officialConfirm() {
@@ -89,6 +109,17 @@ export default {
       cursor: pointer;
       display: inline-flex;
       justify-content: flex-end;
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        -webkit-border-radius: 100%;
+        z-index: 1;
+      }
 
       .changeid {
         position: relative;
@@ -152,6 +183,10 @@ export default {
       }
       .user-info {
         display: inline-flex;
+        .photo {
+          position: relative;
+          left: 20px;
+        }
         .name {
           margin: auto;
           color: #333333;
