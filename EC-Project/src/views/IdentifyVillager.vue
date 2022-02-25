@@ -101,6 +101,8 @@ export default {
         "达斡尔族", "仫佬族", "羌族", "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族", "普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
         "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族", "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族"],
       villagerForm: {
+        //用户名
+        villagerUsername: '',
         //所属村庄名
         villageName: '',
         //姓名
@@ -145,6 +147,10 @@ export default {
       }
     }
   },
+  created() {
+    //获取用户名
+    this.villagerForm.villagerUsername = this.$route.params.username;
+  },
   methods: {
     //籍贯
     handleChange () {
@@ -159,6 +165,9 @@ export default {
           //将表单数据上传至后端
           let url = 'http://ec.vaiwan.cn/identify'; //后端登录接口
           let data = {
+            //用户名：
+            villagerUsername: String(this.villagerUsername),
+            //村庄名：
             villageName: String(this.villagerForm.villageName),
             //姓名
             villagerName: String(this.villagerForm.villagerName),
