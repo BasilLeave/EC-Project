@@ -119,6 +119,8 @@ export default {
         "达斡尔族", "仫佬族", "羌族", "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族", "普米族", "塔吉克族", "怒族", "乌孜别克族", "俄罗斯族", "鄂温克族",
         "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族", "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族"],
       officialForm: {
+        //用户名
+        officialUsername: '',
         //所属村庄名
         villageName: '',
         //姓名
@@ -149,29 +151,34 @@ export default {
         villageName: [
           {required: true, message: '请输入村庄名', trigger: 'blur'},
         ],
-        villagerName: [
+        officialName: [
           {required: true, message: '请输入真实姓名', trigger: 'blur'},
           {min:2, max: 10, message: '真实姓名在2到10个字符之间'}
         ],
-        villagerPhone: [
+        officialPhone: [
           {required: false, message: '请输入手机号', trigger: "blur"},
           {validator: checkPhone, trigger: "blur"},
         ],
-        villagerEmail: [
+        officialEmail: [
           {required: false, message: '请输入邮箱', trigger: "blur"},
           {validator: checkEmail, trigger: "blur"},
         ],
-        villagerIDNumber: [
+        officialIDNumber: [
           {required: true, message: '请输入身份证号', trigger: 'blur'},
           {validator: checkIDNumber, trigger: "blur"},
         ]
       }
     }
   },
+  created() {
+    //获取用户名
+    this.officialForm.officialUsername = this.$route.params.username;
+    // alert(this.officialForm.officialUsername)
+  },
   methods: {
     //籍贯
     handleChange () {
-      this.villagerForm.villagerOrigin = CodeToText[this.selectedOptions[0]] + CodeToText[this.selectedOptions[1]]
+      this.officialForm.officialOrigin = CodeToText[this.selectedOptions[0]] + CodeToText[this.selectedOptions[1]]
     },
     //图片上传之前
     beforeUpload(file) {
